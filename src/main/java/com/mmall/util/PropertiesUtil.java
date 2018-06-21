@@ -1,22 +1,24 @@
 package com.mmall.util;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.util.PropertiesUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-public class PropertiesUtils {
+public class PropertiesUtil {
     private static Properties props;
+    private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
 
     static {
-        String fileName = "Config/mmall.properties";
+        String fileName = "properties/mmall.properties";
         props = new Properties();
         try {
-            props.load(new InputStreamReader(Object.class.getClassLoader().getResourceAsStream(fileName),"UTF-8"));
+            props.load(new InputStreamReader(PropertiesUtil.class.getResourceAsStream(fileName),"UTF-8"));
         } catch (IOException e) {
-//            logger.error("配置文件读取异常",e);
+            logger.error("配置文件读取异常",e);
         }
     }
 
