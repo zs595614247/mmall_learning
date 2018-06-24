@@ -206,8 +206,6 @@
             <artifactId>hashids</artifactId>
             <version>1.0.3</version>
         </dependency>
-
-
         <!-- ftpclient -->
         <dependency>
             <groupId>commons-net</groupId>
@@ -320,7 +318,4 @@
         </plugins>
 
     </build>
-
-
-
 </project>
