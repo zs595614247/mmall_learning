@@ -206,8 +206,6 @@
             <artifactId>hashids</artifactId>
             <version>1.0.3</version>
         </dependency>
-
-
         <!-- ftpclient -->
         <dependency>
             <groupId>commons-net</groupId>
@@ -247,7 +245,6 @@
             <artifactId>alipay-sdk-java</artifactId>
             <version>${alipay.sdk.java.version}</version>
         </dependency>
-
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
@@ -291,7 +288,6 @@
         </dependency>
     </dependencies>
 
-
     <build>
         <finalName>mmall</finalName>
         <plugins>
@@ -320,7 +316,4 @@
         </plugins>
 
     </build>
-
-
-
 </project>
