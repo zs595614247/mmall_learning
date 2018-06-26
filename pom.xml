@@ -245,7 +245,6 @@
             <artifactId>alipay-sdk-java</artifactId>
             <version>${alipay.sdk.java.version}</version>
         </dependency>
-
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
@@ -288,7 +287,6 @@
             <version>2.9.0</version>
         </dependency>
     </dependencies>
-
 
     <build>
         <finalName>mmall</finalName>

@@ -9,8 +9,39 @@ public class Cons {
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
 
-    public enum PaymentTypeEnum {
+    public interface AlipayCallback {
+        String TRADE_STATUS_WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
+        String TRADE_STATUS_TRADE_SUCCESS = "TRADE_SUCCESS";
 
+        String RESPONSE_SUCCESS = "success";
+        String RESPONSE_FAILED = "failed";
+    }
+
+    public enum PayPlatformEnum{
+        /**
+         * 支付平台
+         */
+        ALIPAY(1, "支付宝");
+
+        PayPlatformEnum(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        private String value;
+        private int code;
+
+        public String getValue() {
+            return value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+    }
+
+    public enum PaymentTypeEnum {
         /**
          * 支付类型
          */
@@ -30,6 +61,16 @@ public class Cons {
 
         public int getCode() {
             return code;
+        }
+
+        public static PaymentTypeEnum codeOf(int code) {
+            for (PaymentTypeEnum paymentTypeyEnum :
+                    values()) {
+                if (paymentTypeyEnum.getCode() == code) {
+                    return paymentTypeyEnum;
+                }
+            }
+            throw new RuntimeException("没有找到对应的枚举");
         }
     }
 
@@ -67,7 +108,7 @@ public class Cons {
                     return orderStatusEnum;
                 }
             }
-            throw new RuntimeException("么有找到对应的枚举");
+            throw new RuntimeException("没有找到对应的枚举");
         }
     }
 

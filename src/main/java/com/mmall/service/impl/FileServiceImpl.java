@@ -22,7 +22,7 @@ import java.util.UUID;
 public class FileServiceImpl implements IFileService {
 
     private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
-    private static final String OS_LINUX = "linux";
+    public static final String OS_LINUX = "linux";
 
     @Override
     public String upload(MultipartFile file, String path) {
