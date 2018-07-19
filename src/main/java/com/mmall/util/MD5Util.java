@@ -1,7 +1,6 @@
 package com.mmall.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.security.MessageDigest;
 
@@ -11,9 +10,10 @@ import java.security.MessageDigest;
  * @author keriezhang
  * @date 2016/10/31
  */
+
+@Slf4j
 public class MD5Util {
 
-    private static Logger logger = LoggerFactory.getLogger(MD5Util.class);
 
     private static String byteArrayToHexString(byte[] b) {
         StringBuilder resultSb = new StringBuilder();
@@ -51,7 +51,7 @@ public class MD5Util {
                 resultString = byteArrayToHexString(md.digest(resultString.getBytes(charsetname)));
             }
         } catch (Exception exception) {
-            logger.error("MD5加密失败",exception);
+            log.error("MD5加密失败",exception);
         }
         return resultString.toUpperCase();
     }

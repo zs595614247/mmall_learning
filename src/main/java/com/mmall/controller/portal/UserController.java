@@ -5,12 +5,16 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -21,12 +25,17 @@ public class UserController {
     private IUserService iUserService;
 
     @PostMapping("login.do")
-    public ServerResponse<User> login(String username, String password, HttpSession session) {
-        ServerResponse<User> response = iUserService.login(username, password);
-        if (response.isSuccess()) {
-            session.setAttribute(Cons.CURRENT_USER,response.getData());
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+        ServerResponse<User> serverResponse = iUserService.login(username, password);
+        if (serverResponse.isSuccess()) {
+            // 60C35614A6A4C662885495B7DB82D2D5
+            // 60C35614A6A4C662885495B7DB82D2D5
+            CookieUtil.writeLoginToken(response,session.getId());
+            CookieUtil.readLoginToken(request);
+            CookieUtil.delLoginToken(request, response);
+            RedisPoolUtil.setExpire(session.getId(), JsonUtil.objToString(response.getData()), Cons.RedisCacheExtime.REDIS_SESSION_EXTIME);
         }
-        return response;
+        return serverResponse;
     }
     @PostMapping("logout.do")
     public ServerResponse<User> logout(HttpSession session) {
