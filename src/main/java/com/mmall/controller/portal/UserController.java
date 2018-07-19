@@ -33,7 +33,7 @@ public class UserController {
             CookieUtil.writeLoginToken(response,session.getId());
             CookieUtil.readLoginToken(request);
             CookieUtil.delLoginToken(request, response);
-            RedisPoolUtil.setExpire(session.getId(), JsonUtil.objToString(response.getData()), Cons.RedisCacheExtime.REDIS_SESSION_EXTIME);
+            RedisPoolUtil.setExpire(session.getId(), JsonUtil.objToString(serverResponse.getData()), Cons.RedisCacheExtime.REDIS_SESSION_EXTIME);
         }
         return serverResponse;
     }
