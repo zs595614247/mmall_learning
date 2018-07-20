@@ -136,6 +136,7 @@ public class JsonUtil {
         log.info("userJsonPretty:{}",userJsonPretty);
 
         User user1 = JsonUtil.string2Obj(userJson, User.class);
+
         System.out.println(user1);
     }
 }

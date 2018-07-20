@@ -8,6 +8,7 @@ import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.RedisPoolUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class UserController {
     private IUserService iUserService;
 
     @PostMapping("login.do")
-    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response) {
         ServerResponse<User> serverResponse = iUserService.login(username, password);
         if (serverResponse.isSuccess()) {
             CookieUtil.writeLoginToken(response,session.getId());
@@ -34,8 +35,10 @@ public class UserController {
         return serverResponse;
     }
     @PostMapping("logout.do")
-    public ServerResponse<User> logout(HttpSession session) {
-        session.removeAttribute(Cons.CURRENT_USER);
+    public ServerResponse<User> logout(HttpServletRequest request,HttpServletResponse response) {
+
+        CookieUtil.delLoginToken(request, response);
+        RedisPoolUtil.del(CookieUtil.readLoginToken(request));
         return ServerResponse.createBySuccess();
     }
 
@@ -50,8 +53,13 @@ public class UserController {
     }
 
     @PostMapping("get_user_info.do")
-    public ServerResponse<User> getUserInfo(HttpSession session) {
-        User user = (User) session.getAttribute(Cons.CURRENT_USER);
+    public ServerResponse<User> getUserInfo(HttpServletRequest request) {
+        String loginToken = CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByErrorMessage("用户未登录无法获得用户信息");
+        }
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user != null) {
             return ServerResponse.createBySuccess(user);
         }
