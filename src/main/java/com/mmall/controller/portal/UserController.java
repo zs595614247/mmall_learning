@@ -26,7 +26,7 @@ public class UserController {
     private IUserService iUserService;
 
     @PostMapping("login.do")
-    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response) {
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response,HttpServletRequest request) {
         ServerResponse<User> serverResponse = iUserService.login(username, password);
         if (serverResponse.isSuccess()) {
             CookieUtil.writeLoginToken(response,session.getId());
@@ -36,7 +36,6 @@ public class UserController {
     }
     @PostMapping("logout.do")
     public ServerResponse<User> logout(HttpServletRequest request,HttpServletResponse response) {
-
         CookieUtil.delLoginToken(request, response);
         RedisPoolUtil.del(CookieUtil.readLoginToken(request));
         return ServerResponse.createBySuccess();
