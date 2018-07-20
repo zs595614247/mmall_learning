@@ -98,6 +98,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ServerResponse<String> checkAnswer(String username, String question, String answer) {
+        ServerResponse<String> response = checkValid(username, Cons.USERNAME);
+        if (response.isSuccess()) {
+            return ServerResponse.createByErrorMessage("用户不存在");
+        }
         int resultCount = userMapper.checkAnswer(username, question, answer);
         if (resultCount > 0) {
             //问题和问题答案是用户的并且是正确的
