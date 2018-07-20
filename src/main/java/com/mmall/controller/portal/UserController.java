@@ -26,7 +26,7 @@ public class UserController {
     private IUserService iUserService;
 
     @PostMapping("login.do")
-    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response,HttpServletRequest request) {
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response) {
         ServerResponse<User> serverResponse = iUserService.login(username, password);
         if (serverResponse.isSuccess()) {
             CookieUtil.writeLoginToken(response,session.getId());
