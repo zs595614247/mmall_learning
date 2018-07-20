@@ -61,7 +61,6 @@ public class RedisPool {
     }
 
     public static Jedis getJedis() {
-
         return jedisPool.getResource();
     }
 
