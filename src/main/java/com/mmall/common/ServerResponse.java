@@ -2,7 +2,6 @@ package com.mmall.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 
@@ -34,6 +33,8 @@ public class ServerResponse<T> implements Serializable {
         this.status = status;
         this.msg = msg;
     }
+
+
     @JsonIgnore
     public boolean isSuccess() {
         return this.status == ResponseCode.SUCCESS.getCode();

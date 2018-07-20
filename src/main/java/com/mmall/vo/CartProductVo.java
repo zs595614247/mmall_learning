@@ -2,6 +2,7 @@ package com.mmall.vo;
 
 import java.math.BigDecimal;
 
+
 public class CartProductVo {
 
     private Integer id;
