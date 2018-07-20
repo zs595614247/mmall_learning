@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class CookieUtil {
 
-    private final static String COOKIE_DOMAIN = "www.happymmall.com";
+    private final static String COOKIE_DOMAIN = "happymmall.com";
     private final static String COOKIE_NAME = "mmall_login_token";
 
     public static void delLoginToken(HttpServletRequest request,HttpServletResponse response) {
@@ -20,6 +20,8 @@ public class CookieUtil {
                 if (COOKIE_NAME.equals(cookie.getName())) {
                     cookie.setDomain(COOKIE_DOMAIN);
                     cookie.setPath("/");
+                    //不可通过脚本访问cookie
+                    cookie.setHttpOnly(true);
                     cookie.setMaxAge(0);
                     log.info("del cookieName:{},cookieValue:{}", cookie.getName(), cookie.getValue());
                     response.addCookie(cookie);

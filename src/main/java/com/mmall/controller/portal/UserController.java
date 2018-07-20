@@ -28,11 +28,7 @@ public class UserController {
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response, HttpServletRequest request) {
         ServerResponse<User> serverResponse = iUserService.login(username, password);
         if (serverResponse.isSuccess()) {
-            // 60C35614A6A4C662885495B7DB82D2D5
-            // 60C35614A6A4C662885495B7DB82D2D5
             CookieUtil.writeLoginToken(response,session.getId());
-            CookieUtil.readLoginToken(request);
-            CookieUtil.delLoginToken(request, response);
             RedisPoolUtil.setExpire(session.getId(), JsonUtil.objToString(serverResponse.getData()), Cons.RedisCacheExtime.REDIS_SESSION_EXTIME);
         }
         return serverResponse;
