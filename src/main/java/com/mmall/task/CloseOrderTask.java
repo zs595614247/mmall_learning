@@ -67,7 +67,7 @@ public class CloseOrderTask {
     private void closeOrder() {
         ShardRedisPoolUtil.expire(Cons.RedisLock.CLOSE_ORDER_TASK_LOCK, 50);
         log.info("获取{},ThreadName:{}", Cons.RedisLock.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
-//        iOrderService.closeOrder(PropertiesUtil.getIntegerProperty("close.order.task.time.hour","2"));
+        iOrderService.closeOrder(PropertiesUtil.getIntegerProperty("close.order.task.time.hour","2"));
         Long delOrderTaskLock = ShardRedisPoolUtil.del(Cons.RedisLock.CLOSE_ORDER_TASK_LOCK);
         if (delOrderTaskLock != null && delOrderTaskLock.intValue() == 0) {
             log.error("释放锁失败{},ThreadName:{}", Cons.RedisLock.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
