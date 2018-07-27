@@ -13,13 +13,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-;
-
+/**
+ * @author zs595
+ */
 @Service("iUserService")
 public class UserServiceImpl implements IUserService {
 
-    @Autowired
+
     private UserMapper userMapper;
+
+    @Autowired
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     @Override
     public ServerResponse<User> login(String username, String password) {
@@ -181,7 +187,8 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createBySuccess(user);
     }
 
-    //backend
+    /* backend */
+
     @Override
     public ServerResponse checkAdminRole(User user) {
         if (user != null && user.getRole() == Cons.Role.ROLE_AMDIN) {

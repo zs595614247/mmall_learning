@@ -30,6 +30,7 @@ import com.mmall.vo.ShippingVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,23 +43,56 @@ import java.util.*;
 @Slf4j
 public class OrderServiceImpl implements IOrderService {
 
-    @Autowired
-    private CartMapper cartMapper;
+
+    private final CartMapper cartMapper;
+
+    private final ProductMapper productMapper;
+
+    private final OrderMapper orderMapper;
+
+    private final OrderItemMapper orderItemMapper;
+
+    private final ShippingMapper shippingMapper;
+
+    private final PayInfoMapper payInfoMapper;
 
     @Autowired
-    private ProductMapper productMapper;
+    public OrderServiceImpl(CartMapper cartMapper,
+                            ProductMapper productMapper,
+                            OrderMapper orderMapper,
+                            OrderItemMapper orderItemMapper,
+                            ShippingMapper shippingMapper,
+                            PayInfoMapper payInfoMapper) {
+        this.cartMapper = cartMapper;
+        this.productMapper = productMapper;
+        this.orderMapper = orderMapper;
+        this.orderItemMapper = orderItemMapper;
+        this.shippingMapper = shippingMapper;
+        this.payInfoMapper = payInfoMapper;
+    }
 
-    @Autowired
-    private OrderMapper orderMapper;
-
-    @Autowired
-    private OrderItemMapper orderItemMapper;
-
-    @Autowired
-    private ShippingMapper shippingMapper;
-
-    @Autowired
-    private PayInfoMapper payInfoMapper;
+    @Override
+    public void closeOrder(int hour) {
+        Date closeDateTime = DateUtils.addHours(new Date(), -hour);
+        List<Order> orderList = orderMapper.selectOrderStatusByCreateTime(Cons.OrderStatusEnum.NO_PAY.getCode(), DateTimeUtil.dateToStr(closeDateTime));
+        for (Order order :
+                orderList) {
+            List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
+            for (OrderItem orderItem :
+                    orderItemList) {
+                Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
+                if (stock == null) {
+                    continue;
+                }
+                Product product = new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stock + orderItem.getQuantity());
+                productMapper.updateByPrimaryKeySelective(product);
+            }
+            orderMapper.closeOrderByOrderIc(order.getId());
+            log.info("关闭订单OrderNo:{}", order.getOrderNo());
+        }
+    }
 
     @Override
     public ServerResponse queryOrderPayStatus(Integer userId, Long orderNo) {
@@ -90,7 +124,7 @@ public class OrderServiceImpl implements IOrderService {
             return ServerResponse.createByErrorMessage("商户pid不同");
         }
         if (order.getStatus() >= Cons.OrderStatusEnum.PAID.getCode()) {
-            return ServerResponse.createBySuccessMessage("支付宝重复调用");
+            return ServerResponse.createByErrorMessage("支付宝重复调用");
         }
         if (Cons.AlipayCallback.TRADE_STATUS_TRADE_SUCCESS.equals(tradeStatus)) {
             order.setStatus(Cons.OrderStatusEnum.PAID.getCode());

@@ -4,6 +4,9 @@ import com.mmall.common.RedisPool;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 
+/**
+ * @author zs595
+ */
 @Slf4j
 public class RedisPoolUtil {
 
@@ -39,6 +42,27 @@ public class RedisPoolUtil {
         try {
             jedis = RedisPool.getJedis();
             result = jedis.set(key, value);
+        } catch (Exception e) {
+            log.error("set key:{} value:{} error",key,value,e);
+            return null;
+        }finally {
+            RedisPool.returnResource(jedis);
+        }
+        return result;
+    }
+
+    /**
+     * 添加key-value,当且仅当key不存在是才会成功
+     * @param key key
+     * @param value value
+     * @return Status code reply
+     */
+    public static Long setNx(String key, String value) {
+        Jedis jedis = null;
+        Long result;
+        try {
+            jedis = RedisPool.getJedis();
+            result = jedis.setnx(key, value);
         } catch (Exception e) {
             log.error("set key:{} value:{} error",key,value,e);
             return null;

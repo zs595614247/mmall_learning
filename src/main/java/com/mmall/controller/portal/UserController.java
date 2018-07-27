@@ -18,12 +18,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * @author zs595
+ */
 @RestController
 @RequestMapping("/user/")
 public class UserController {
 
-    @Autowired
+
     private IUserService iUserService;
+
+    @Autowired
+    public UserController(IUserService iUserService) {
+        this.iUserService = iUserService;
+    }
 
     @PostMapping("login.do")
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse response) {
@@ -95,7 +103,7 @@ public class UserController {
     }
 
     @PostMapping("update_information.do")
-    public ServerResponse<User> updateInformation(HttpServletRequest request, User user,HttpServletResponse servletResponse) {
+    public ServerResponse<User> updateInformation(HttpServletRequest request, User user) {
         String loginToken = CookieUtil.readLoginToken(request);
         if (StringUtils.isEmpty(loginToken)) {
             return ServerResponse.createByErrorMessage("用户未登录无法获得用户信息");

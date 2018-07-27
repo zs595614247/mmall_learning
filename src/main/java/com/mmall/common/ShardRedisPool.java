@@ -54,7 +54,7 @@ public class ShardRedisPool {
     /**
      * redisServer port
      */
-    private static Integer redis2Port = PropertiesUtil.getIntegerProperty("redis21.port");
+    private static Integer redis2Port = PropertiesUtil.getIntegerProperty("redis2.port");
     /**
      * redisServer password
      */

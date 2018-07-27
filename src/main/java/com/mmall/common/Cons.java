@@ -9,6 +9,10 @@ public class Cons {
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
 
+    public interface RedisLock{
+        String CLOSE_ORDER_TASK_LOCK = "CLOSE_ORDER_TASK_LOCK";
+    }
+
     public interface RedisCacheExtime{
         int REDIS_SESSION_EXTIME = 60 * 30;
     }

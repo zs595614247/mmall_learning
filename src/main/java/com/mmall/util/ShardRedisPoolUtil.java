@@ -52,6 +52,48 @@ public class ShardRedisPoolUtil {
     }
 
     /**
+     * 添加key-value
+     * @param key key
+     * @param value value
+     * @return old value
+     */
+    public static String getSet(String key, String value) {
+        ShardedJedis jedis = null;
+        String result;
+        try {
+            jedis = ShardRedisPool.getJedis();
+            result = jedis.getSet(key, value);
+        } catch (Exception e) {
+            log.error("getSet key:{} value:{} error",key,value,e);
+            return null;
+        }finally {
+            ShardRedisPool.returnResource(jedis);
+        }
+        return result;
+    }
+
+    /**
+     * 添加key-value,当且仅当key不存在时,才会成功,成功返回1,失败返回0
+     * @param key key
+     * @param value value
+     * @return Status code reply
+     */
+    public static Long setNx(String key, String value) {
+        ShardedJedis jedis = null;
+        Long result;
+        try {
+            jedis = ShardRedisPool.getJedis();
+            result = jedis.setnx(key, value);
+        } catch (Exception e) {
+            log.error("setNx key:{} value:{} error",key,value,e);
+            return null;
+        }finally {
+            ShardRedisPool.returnResource(jedis);
+        }
+        return result;
+    }
+
+    /**
      * 查询key的值
      * @param key key
      * @return value

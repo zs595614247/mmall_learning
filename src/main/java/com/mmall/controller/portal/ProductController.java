@@ -5,20 +5,27 @@ import com.mmall.common.ServerResponse;
 import com.mmall.service.IProductService;
 import com.mmall.vo.ProductDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/product/")
 public class ProductController {
 
-    @Autowired
+
     private IProductService iProductService;
+
+    @Autowired
+    public ProductController(IProductService iProductService) {
+        this.iProductService = iProductService;
+    }
 
     @PostMapping("detail.do")
     public ServerResponse<ProductDetailVo> detail(Integer productId) {
+        return iProductService.getProductDetail(productId);
+    }
+
+    @GetMapping(value = "{productId}")
+    public ServerResponse<ProductDetailVo> detailRESTFul(@PathVariable("productId") Integer productId) {
         return iProductService.getProductDetail(productId);
     }
 
