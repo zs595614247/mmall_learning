@@ -36,7 +36,7 @@ public class RedissonManage {
     private void init() {
         try {
             Config config = new Config();
-            config.useSingleServer().setAddress(redisIp+":"+redisPort).setPassword(redisPassword).setDatabase(1);
+            config.useSingleServer().setAddress("redis://"+redisIp+":"+redisPort).setPassword(redisPassword).setDatabase(1);
             redissonClient = Redisson.create(config);
         } catch (Exception e) {
            log.error("redis init error",e);
