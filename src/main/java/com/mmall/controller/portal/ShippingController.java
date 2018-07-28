@@ -11,10 +11,7 @@ import com.mmall.util.JsonUtil;
 import com.mmall.util.ShardRedisPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -26,7 +23,7 @@ public class ShippingController {
     @Autowired
     private IShippingService iShippingService;
 
-    @GetMapping("add.do")
+    @PostMapping("add.do")
     public ServerResponse<Map> add(HttpServletRequest request, Shipping shipping) {
         String loginToken = CookieUtil.readLoginToken(request);
         if (StringUtils.isEmpty(loginToken)) {
@@ -40,7 +37,7 @@ public class ShippingController {
         return iShippingService.add(user.getId(), shipping);
     }
 
-    @GetMapping("del.do")
+    @PostMapping("del.do")
     public ServerResponse del(HttpServletRequest request, Integer shippingId) {
         String loginToken = CookieUtil.readLoginToken(request);
         if (StringUtils.isEmpty(loginToken)) {
@@ -54,7 +51,7 @@ public class ShippingController {
         return iShippingService.del(user.getId(), shippingId);
     }
 
-    @GetMapping("update.do")
+    @PostMapping("update.do")
     public ServerResponse update(HttpServletRequest request, Shipping shipping) {
         String loginToken = CookieUtil.readLoginToken(request);
         if (StringUtils.isEmpty(loginToken)) {
@@ -68,7 +65,7 @@ public class ShippingController {
         return iShippingService.update(user.getId(), shipping);
     }
 
-    @GetMapping("select.do")
+    @PostMapping("select.do")
     public ServerResponse<Shipping> select(HttpServletRequest request, Integer shippingId) {
         String loginToken = CookieUtil.readLoginToken(request);
         if (StringUtils.isEmpty(loginToken)) {
@@ -82,7 +79,7 @@ public class ShippingController {
         return iShippingService.select(user.getId(), shippingId);
     }
 
-    @GetMapping("list.do")
+    @PostMapping("list.do")
     public ServerResponse<PageInfo> list(HttpServletRequest request,
                                          @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {

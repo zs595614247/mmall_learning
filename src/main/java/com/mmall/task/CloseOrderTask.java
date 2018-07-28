@@ -48,7 +48,7 @@ public class CloseOrderTask {
         log.info("定时任务结束");
     }
 
-//    @Scheduled(cron = "0 0/1 * * * ?" )
+    @Scheduled(cron = "0 0/1 * * * ?" )
     public void closeOrderTaskV3() {
         log.info("定时任务启动");
         long lockTimeout = Long.parseLong(PropertiesUtil.getProperty("lock.timeout", "5000"));
@@ -72,14 +72,14 @@ public class CloseOrderTask {
     }
 
 
-    @Scheduled(cron = "0 0/1 * * * ?" )
+//    @Scheduled(cron = "0 0/1 * * * ?" )
     public void closeOrderTaskV4() {
         RLock lock = redissonManage.getRedissonClient().getLock(Cons.RedisLock.CLOSE_ORDER_TASK_LOCK);
         boolean tryLock = false;
         try {
-            if (tryLock = lock.tryLock(0, 5, TimeUnit.SECONDS)) {
+            if (tryLock = lock.tryLock(0, 50, TimeUnit.SECONDS)) {
                 log.info("Redisson获取分布式锁成功:{},ThreadName:{}", Cons.RedisLock.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
-//                iOrderService.closeOrder(PropertiesUtil.getIntegerProperty("close.order.task.time.hour","2"));
+                iOrderService.closeOrder(PropertiesUtil.getIntegerProperty("close.order.task.time.hour","2"));
             }else {
                 log.info("Redisson获取分布式锁失败:{},ThreadName:{}", Cons.RedisLock.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
             }
@@ -88,7 +88,9 @@ public class CloseOrderTask {
         }finally {
             if (tryLock) {
                 lock.unlock();
+                log.info("Redisson释放分布式锁");
             }
+
         }
     }
 

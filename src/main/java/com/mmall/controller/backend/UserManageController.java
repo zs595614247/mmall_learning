@@ -8,7 +8,7 @@ import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.ShardRedisPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +29,7 @@ public class UserManageController {
         this.iUserService = iUserService;
     }
 
-    @GetMapping("login.do")
+    @PostMapping("login.do")
     public ServerResponse<User> login(String username, String password, HttpServletResponse httpServletResponse, HttpSession session) {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
