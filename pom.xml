@@ -359,13 +359,13 @@
         <profile>
             <id>bate</id>
             <properties>
-                <deploy.type>dev</deploy.type>
+                <deploy.type>bate</deploy.type>
             </properties>
         </profile>
         <profile>
             <id>prod</id>
             <properties>
-                <deploy.type>dev</deploy.type>
+                <deploy.type>prod</deploy.type>
             </properties>
         </profile>
     </profiles>
