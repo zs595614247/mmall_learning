@@ -8,13 +8,13 @@
       %d{yyyy-MM-dd HH:mm:ss} [%t] [%c{1}] %-5level - %msg%xEx%n
     </property>
     <property name="log_path">
-     ${CATALINA_HOME}/logs
+      /usr/zhang/developer/logs/mmall_learning/
     </property>
     <property name="file_name">
       mmall.log
     </property>
     <property name="rolling_file_name">
-      ${CATALINA_HOME}/logs/$${date:yyyy-MM}/mmall-%d{yyyy-MM-dd}-%i.log.gz
+      /usr/zhang/developer/logs/mmall_learning/$${date:yyyy-MM}/mmall-%d{yyyy-MM-dd}-%i.log.gz
     </property>
   </Properties>
   <!--先定义所有的appender-->

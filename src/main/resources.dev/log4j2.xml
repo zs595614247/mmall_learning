@@ -8,13 +8,13 @@
       %d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c] %-5level- %msg%xEx%n
     </property>
     <property name="log_path">
-     /usr/zhang/developer/apache-tomcat-8.5.31/logs/mmall_log
+      D:\Java\apache-tomcat-1\logs\mmall_log
     </property>
     <property name="file_name">
       mmall.log
     </property>
     <property name="rolling_file_name">
-      /usr/zhang/developer/apache-tomcat-8.5.31/logs/mmall_log/$${date:yyyy-MM}/mmall-%d{yyyy-MM-dd}-%i.log
+      D:\Java\apache-tomcat-1\logs\mmall_log\$${date:yyyy-MM}/mmall-%d{yyyy-MM-dd}-%i.log
     </property>
   </Properties>
   <!--先定义所有的appender-->
